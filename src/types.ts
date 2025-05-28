@@ -7,9 +7,9 @@ export interface SessionState {
   state: State;
 }
 
-type State = Record<string, {
+type State = {
   hello: string;
-}>;
+}
 
 export interface ServerToClientEvents {
   stateUpdate: (state: SessionState) => void;
