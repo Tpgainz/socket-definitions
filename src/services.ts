@@ -6,6 +6,7 @@ import { getDeviceType } from "./getDeviceType";
 export const useSocket = (socketUrl: string, userId: string) => {
   const [state, setState] = useState<SessionState | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const socketRef = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
   const deviceType = getDeviceType(navigator.userAgent)
 
@@ -26,6 +27,7 @@ export const useSocket = (socketUrl: string, userId: string) => {
 
     socket.on("connect", () => {
       setIsConnected(true);
+      setConnectionError(null);
     });
 
     socket.on("disconnect", () => {
@@ -36,10 +38,17 @@ export const useSocket = (socketUrl: string, userId: string) => {
       setState(newState);
     });
 
+    socket.on("forceDisconnect", (data: { reason: string }) => {
+      console.warn("Force disconnected:", data.reason);
+      setConnectionError(data.reason);
+      setIsConnected(false);
+    });
+
     return () => {
       socket.off("connect");
       socket.off("disconnect");
       socket.off("stateUpdate");
+      socket.off("forceDisconnect");
       socket.disconnect();
     };
   }, [socketUrl, userId]);
@@ -54,6 +63,7 @@ export const useSocket = (socketUrl: string, userId: string) => {
     state,
     isConnected,
     updateState,
-    deviceType
+    deviceType,
+    connectionError
   };
 };

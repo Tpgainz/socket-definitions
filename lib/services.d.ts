@@ -4,4 +4,5 @@ export declare const useSocket: (socketUrl: string, userId: string) => {
     isConnected: boolean;
     updateState: (update: Partial<SessionState>) => void;
     deviceType: string;
+    connectionError: string | null;
 };
