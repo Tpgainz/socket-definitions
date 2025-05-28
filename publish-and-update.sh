@@ -1,6 +1,11 @@
 #!/bin/bash
 
 echo "Building socket-definitions..."
+
+git add .
+git commit -m "Bump version"
+git push origin main    
+
 npm run build
 
 if [ $? -ne 0 ]; then

@@ -2,18 +2,19 @@ export interface SessionState {
     id: string;
     state: Record<string, any>;
 }
-export interface SessionConflictData {
-    deviceType: "web" | "mobile";
-    message: string;
+export type DeviceType = "web" | "mobile";
+export interface ConnectionConflict {
+    userId: string;
+    deviceType: DeviceType;
+    existingSocketId: string;
+    newSocketId: string;
 }
 export interface ServerToClientEvents {
     stateUpdate: (state: SessionState) => void;
-    sessionConflict: (data: SessionConflictData) => void;
-    sessionTerminated: (data: {
-        reason: string;
-    }) => void;
+    connectionConflict: (conflict: ConnectionConflict) => void;
+    forceDisconnect: (reason: string) => void;
 }
 export interface ClientToServerEvents {
     updateState: (update: Partial<SessionState>) => void;
-    forceConnect: () => void;
+    forceConnection: (deviceType: DeviceType) => void;
 }
