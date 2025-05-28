@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { ServerToClientEvents, ClientToServerEvents, SessionState } from "./types";
 import { io, Socket } from "socket.io-client";
+import { getDeviceType } from "./getDeviceType";
 
 export const useSocket = (socketUrl: string, userId: string) => {
   const [state, setState] = useState<SessionState | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
+  const deviceType = getDeviceType(navigator.userAgent)
 
   useEffect(() => {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(socketUrl, {
@@ -15,7 +17,8 @@ export const useSocket = (socketUrl: string, userId: string) => {
       reconnectionAttempts: 3,
       reconnectionDelay: 1000,
       query: {
-        userId: userId
+        userId: userId,
+        deviceType: deviceType
       }
     });
 
