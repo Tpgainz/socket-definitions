@@ -54,5 +54,6 @@ export const useSocket = (socketUrl: string, userId: string) => {
     state,
     isConnected,
     updateState,
+    deviceType
   };
 };
