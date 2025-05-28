@@ -8,6 +8,9 @@ type State = {
 };
 export interface ServerToClientEvents {
     stateUpdate: (state: SessionState) => void;
+    forceDisconnect: (data: {
+        reason: string;
+    }) => void;
 }
 export interface ClientToServerEvents {
     updateState: (update: Partial<SessionState>) => void;

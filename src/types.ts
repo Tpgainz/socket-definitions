@@ -1,5 +1,3 @@
-
-
 export type DeviceType = "web" | "mobile";
 
 export interface SessionState {
@@ -13,6 +11,7 @@ type State = {
 
 export interface ServerToClientEvents {
   stateUpdate: (state: SessionState) => void;
+  forceDisconnect: (data: { reason: string }) => void;
 }
 
 export interface ClientToServerEvents {
