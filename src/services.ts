@@ -2,36 +2,57 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { ServerToClientEvents, ClientToServerEvents, UserState } from "./types";
 import { io, Socket } from "socket.io-client";
 
-//Deisgned to be used in the web app and the mobile app and simple to use
-//const {emit,state} = useSocket()
-
-export const useSocket = (socketUrl: string) => {
+export const useSocket = (socketUrl: string, userId: string) => {
   const [state, setState] = useState<UserState | null>(null);
-  //Handle the connection to the server socket
+  const [isConnected, setIsConnected] = useState(false);
+  const socketRef = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
+
   useEffect(() => {
-    const socket = io(socketUrl, {
+    // Créer la connexion avec l'userId
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(socketUrl, {
       transports: ["websocket"],
       timeout: 10000,
       reconnection: true,
       reconnectionAttempts: 3,
       reconnectionDelay: 1000,
+      query: {
+        userId: userId
+      }
     });
-    socket.on("stateUpdate", (state: UserState) => {
-      setState(state);
+
+    socketRef.current = socket;
+
+    // Événements de connexion
+    socket.on("connect", () => {
+      setIsConnected(true);
     });
+
+    socket.on("disconnect", () => {
+      setIsConnected(false);
+    });
+
+    // Écouter les mises à jour d'état
+    socket.on("stateUpdate", (newState: UserState) => {
+      setState(newState);
+    });
+
     return () => {
+      socket.off("connect");
+      socket.off("disconnect");
       socket.off("stateUpdate");
+      socket.disconnect();
     };
+  }, [socketUrl, userId]);
+
+  const updateUserState = useCallback((update: Partial<UserState>) => {
+    if (socketRef.current?.connected) {
+      socketRef.current.emit("updateState", update);
+    }
   }, []);
 
   return {
     state,
+    isConnected,
     updateUserState,
   };
-};
-
-
-
-const updateUserState = (socket: Socket) => (state: UserState) => {
-  socket.emit("updateUserState", { state });
 };

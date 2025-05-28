@@ -1,6 +1,6 @@
 import { UserState } from "./types";
-import { Socket } from "socket.io-client";
-export declare const useSocket: (socketUrl: string) => {
+export declare const useSocket: (socketUrl: string, userId: string) => {
     state: UserState | null;
-    updateUserState: (socket: Socket) => (state: UserState) => void;
+    isConnected: boolean;
+    updateUserState: (update: Partial<UserState>) => void;
 };

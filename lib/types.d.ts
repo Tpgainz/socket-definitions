@@ -1,6 +1,9 @@
 export interface CustomAction {
+    type: string;
+    payload?: any;
 }
 export interface Metrics {
+    [key: string]: number | string;
 }
 export interface UserState {
     id: string;

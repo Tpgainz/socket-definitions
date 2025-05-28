@@ -1,11 +1,12 @@
+export interface CustomAction {
+  type: string;
+  payload?: any;
+}
 
+export interface Metrics {
+  [key: string]: number | string;
+}
 
-
-export interface CustomAction {}
-
-export interface Metrics {}
-
-// Types partagés
 export interface UserState {
   id: string;
   currentRoom?: string;
@@ -21,6 +22,5 @@ export interface ServerToClientEvents {
 export interface ClientToServerEvents {
   updateState: (update: Partial<UserState>) => void;
   customAction: (action: CustomAction) => void;
-  requestMetrics: () => void
+  requestMetrics: () => void;
 }
-
