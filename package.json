@@ -1,6 +1,6 @@
 {
     "name": "@tpgainz/socket-events",
-    "version": "1.3.24",
+    "version": "1.3.25",
     "description": "Déclarations communes des sockets",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
