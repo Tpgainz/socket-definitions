@@ -9,8 +9,20 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "Bumping version..." -ForegroundColor Green
 npm version patch
 
+Write-Host "Committing any uncommitted changes..." -ForegroundColor Green
+git add .
+git commit -m "Pre-version bump commit"
+
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Version bump failed!" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "Pushing to origin..." -ForegroundColor Green
+git push origin main
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Push failed!" -ForegroundColor Red
     exit 1
 }
 
