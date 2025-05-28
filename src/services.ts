@@ -1,14 +1,13 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { ServerToClientEvents, ClientToServerEvents, UserState } from "./types";
+import { ServerToClientEvents, ClientToServerEvents, SessionState } from "./types";
 import { io, Socket } from "socket.io-client";
 
 export const useSocket = (socketUrl: string, userId: string) => {
-  const [state, setState] = useState<UserState | null>(null);
+  const [state, setState] = useState<SessionState | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
 
   useEffect(() => {
-    // Créer la connexion avec l'userId
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(socketUrl, {
       transports: ["websocket"],
       timeout: 10000,
@@ -22,7 +21,6 @@ export const useSocket = (socketUrl: string, userId: string) => {
 
     socketRef.current = socket;
 
-    // Événements de connexion
     socket.on("connect", () => {
       setIsConnected(true);
     });
@@ -31,8 +29,7 @@ export const useSocket = (socketUrl: string, userId: string) => {
       setIsConnected(false);
     });
 
-    // Écouter les mises à jour d'état
-    socket.on("stateUpdate", (newState: UserState) => {
+    socket.on("stateUpdate", (newState: SessionState) => {
       setState(newState);
     });
 
@@ -44,7 +41,7 @@ export const useSocket = (socketUrl: string, userId: string) => {
     };
   }, [socketUrl, userId]);
 
-  const updateUserState = useCallback((update: Partial<UserState>) => {
+  const updateState = useCallback((update: Partial<SessionState>) => {
     if (socketRef.current?.connected) {
       socketRef.current.emit("updateState", update);
     }
@@ -53,6 +50,6 @@ export const useSocket = (socketUrl: string, userId: string) => {
   return {
     state,
     isConnected,
-    updateUserState,
+    updateState,
   };
 };

@@ -1,26 +1,13 @@
-export interface CustomAction {
-  type: string;
-  payload?: any;
-}
-
-export interface Metrics {
-  [key: string]: number | string;
-}
-
-export interface UserState {
+export interface SessionState {
   id: string;
-  currentRoom?: string;
-  customData: Record<string, any>;
+  state: Record<string, any>;
+  // Plus besoin de currentRoom car c'est automatique
 }
 
 export interface ServerToClientEvents {
-  stateUpdate: (state: UserState) => void;
-  customAction: (action: CustomAction) => void;
-  metricsUpdate: (metrics: Metrics) => void;
+  stateUpdate: (state: SessionState) => void;
 }
 
 export interface ClientToServerEvents {
-  updateState: (update: Partial<UserState>) => void;
-  customAction: (action: CustomAction) => void;
-  requestMetrics: () => void;
+  updateState: (update: Partial<SessionState>) => void;
 }

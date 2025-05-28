@@ -1,6 +1,6 @@
-import { UserState } from "./types";
+import { SessionState } from "./types";
 export declare const useSocket: (socketUrl: string, userId: string) => {
-    state: UserState | null;
+    state: SessionState | null;
     isConnected: boolean;
-    updateUserState: (update: Partial<UserState>) => void;
+    updateState: (update: Partial<SessionState>) => void;
 };
