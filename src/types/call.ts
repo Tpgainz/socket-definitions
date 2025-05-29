@@ -6,7 +6,9 @@ export interface SessionState {
 }
 
 type State = {
-  hello: string;
+  call: CallState;
+  isTunneled: boolean;
+  error?: string;
 }
 
 
@@ -29,18 +31,13 @@ export const CALL_EVENTS = {
     readonly initiatedAt: number;
     readonly answeredAt?: number;
     readonly endedAt?: number;
+    readonly error?: string;
   }
   
   export interface CallState {
     readonly session: CallSession | null;
     readonly status: CallEvent;
     readonly error?: string;
-  }
-  
-  export interface ConnectionState {
-    readonly userId: string | null;
-    readonly error?: string;
-    readonly isTunneled?: boolean;
   }
   
   
