@@ -1,11 +1,7 @@
 export type DeviceType = "web" | "mobile";
 
 export interface SessionState {
-  id: string;
-  state: State;
-}
-
-type State = {
+  userId: string;
   call: CallState;
   isTunneled: boolean;
   error?: string;

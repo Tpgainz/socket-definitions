@@ -1,13 +1,10 @@
 export type DeviceType = "web" | "mobile";
 export interface SessionState {
-    id: string;
-    state: State;
-}
-type State = {
+    userId: string;
     call: CallState;
     isTunneled: boolean;
     error?: string;
-};
+}
 export declare const CALL_EVENTS: {
     readonly CALL_INITIATED: "initiated";
     readonly CALL_RINGING: "ringing";
@@ -32,4 +29,3 @@ export interface CallState {
     readonly status: CallEvent;
     readonly error?: string;
 }
-export {};
