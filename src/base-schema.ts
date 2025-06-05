@@ -21,6 +21,7 @@ export const keywordOptionsSchema = z.object({
   localExclusion: z.boolean().default(false),
 });
 
+
 export const readerOptionsSchema = z.object({
   y: z.union([z.literal(MAX_Y), z.number()]).default(MAX_Y),
   fontHeight: z.number().default(10),
